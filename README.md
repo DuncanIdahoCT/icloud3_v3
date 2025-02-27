@@ -1,13 +1,15 @@
 #### This fork is strictly to track the test I'm conducting that allows me to repurpose the lost mode HA service handler to call pyicloud display_message instead as the current service options do not provide for display_message. However lost mode does allow a message json data to be passed and I don't need lost mode hence the repurpose. This is just a test.
 
 JSON 
-''''
+   ```
 {
    "device_name":"duncans_iphone",
    "number":"123-456-7890", <--number is passed only because it is expected by icloud3.lost_device_alert
    "message":"Testing, Testing, 1,2,3..." <--custom message in HA Service call goes here
 }
-''''
+   ```
+
+This change produces a displayed message with/without sound vs. a sound played which are two different iCloud service calls that pyicloud can make. The former being my personal preference to "agressively" alert iDevice users with an actual message vs just a "Find my iPhone Alert" which tells us nothing.
 
 # Original Readme...
 
