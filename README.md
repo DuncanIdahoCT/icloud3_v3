@@ -1,4 +1,8 @@
-# iCloud3 v3, Development Version
+#### This fork is strictly to track the test I'm conducting that allows me to repurpose the lost mode HA service handler to call pyicloud display_message instead as the current service options do not provide for display_message. However lost mode does allow a message json data to be passed and I don't need lost mode hence the repurpose. This is just a test.
+
+# Original Readme...
+
+## iCloud3 v3, Development Version
 
 #### This repo is used for testing new features and updates to iCloud3 v3. It is not the version of iCloud3 that is available for general use. The general availability version is found on the iCloud3 repo [here](https://github.com/gcobb321/icloud3)
 
