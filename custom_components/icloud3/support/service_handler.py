@@ -621,7 +621,7 @@ def lost_device_alert_service_handler(devicename, number, message=None):
     if Device.is_data_source_ICLOUD:
         device_id = Device.icloud_device_id
         if device_id and Device.PyiCloud and Device.PyiCloud.DeviceSvc:
-            Device.PyiCloud.DeviceSvc.lost_device(device_id, number=number, message=message)
+            Device.PyiCloud.DeviceSvc.display_message(device_id, message=message)
         # if device_id and Gb.PyiCloud and Gb.PyiCloud.DeviceSvc:
         #     Gb.PyiCloud.DeviceSvc.lost_device(device_id, number=number, message=message)
 
