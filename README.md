@@ -1,11 +1,11 @@
-#### This fork is strictly to track the test I'm conducting that allows me to repurpose the lost mode HA service handler to call pyicloud display_message instead as the current service options do not provide for display_message. However lost mode does allow a message json data to be passed and I don't need lost mode hence the repurpose. This is just a test.
+#### This fork simply adds the display_message (pyicloud) function to the existing iCloud3_v3 custom componnent maintained by gcobb321.
 
-JSON 
+Example (JSON) Data for use in automation or Node-RED
    ```
 {
-   "device_name":"duncans_iphone",
-   "number":"123-456-7890", <--number is passed only because it is expected by icloud3.lost_device_alert
-   "message":"Testing, Testing, 1,2,3..." <--custom message in HA Service call goes here
+   "device_name":"Duncan (duncan_iphone)",
+   "message":"Back door is unlocked",
+   "sounds":"True"
 }
    ```
 
