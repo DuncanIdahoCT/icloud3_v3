@@ -46,6 +46,7 @@ CMD_REFRESH_EVENT_LOG      = 'refresh_event_log'
 CMD_RESTART                = 'restart'
 CMD_CONFIG_FLOW            = 'config_flow'
 CMD_FIND_DEVICE_ALERT      = 'find_alert'
+CMD_DISPLAY_MESSAGE_ALERT  = 'message_alert'
 CMD_LOCATE                 = 'locate'
 
 REFRESH_EVLOG_FNAME             = 'Refresh Event Log'
@@ -69,6 +70,7 @@ DEVICE_ACTIONS =  [CMD_REQUEST_LOCATION,
                     CMD_PAUSE,
                     CMD_RESUME,
                     CMD_FIND_DEVICE_ALERT,
+                    CMD_DISPLAY_MESSAGE_ALERT,
                     CMD_LOCATE, ]
 
 NO_EVLOG_ACTION_POST_EVENT = [
@@ -97,6 +99,7 @@ SERVICE_SCHEMA = vol.Schema({
     vol.Optional('action_fname'): cv.string,
     vol.Optional('number'): cv.string,
     vol.Optional('message'): cv.string,
+    vol.Optional('sounds'): cv.string,
 })
 
 from   homeassistant.util.location import distance
@@ -178,6 +181,17 @@ def process_lost_device_alert_service_request(call):
     post_event(f"{EVLOG_ERROR}Lost Mode Alert > {result_msg}")
 
 #--------------------------------------------------------------------
+def process_display_message_alert_service_request(call):
+    """Call the display_message_alert to display a message and (optionally) play a sound on the phone"""
+
+    devicename = call.data.get(CONF_DEVICENAME)
+    message    = call.data.get('message')
+    sounds      = call.data.get('sounds')
+    action, devicename = resolve_action_devicename_values("", devicename)
+
+    display_message_alert_service_handler(devicename, message, sounds)
+
+#--------------------------------------------------------------------
 def resolve_action_devicename_values(action, devicename):
     '''
     Convert the action and devicenames to their actual intervalues when they are being executed
@@ -233,6 +247,8 @@ def register_icloud3_services():
                     process_find_iphone_alert_service_request, schema=SERVICE_SCHEMA)
         Gb.hass.services.register(DOMAIN, 'lost_device_alert',
                     process_lost_device_alert_service_request, schema=SERVICE_SCHEMA)
+        Gb.hass.services.register(DOMAIN, 'display_message_alert',
+                    process_display_message_alert_service_request, schema=SERVICE_SCHEMA)
 
         return True
 
@@ -621,9 +637,26 @@ def lost_device_alert_service_handler(devicename, number, message=None):
     if Device.is_data_source_ICLOUD:
         device_id = Device.icloud_device_id
         if device_id and Device.PyiCloud and Device.PyiCloud.DeviceSvc:
-            Device.PyiCloud.DeviceSvc.display_message(device_id, message=message)
+            Device.PyiCloud.DeviceSvc.lost_device(device_id, number=number, message=message)
         # if device_id and Gb.PyiCloud and Gb.PyiCloud.DeviceSvc:
         #     Gb.PyiCloud.DeviceSvc.lost_device(device_id, number=number, message=message)
 
             post_event(devicename, "iCloud Lost Device Alert sent")
+            return
+
+#--------------------------------------------------------------------
+def display_message_alert_service_handler(devicename, message, sounds=False):
+    """
+    Call the display message function of pyicloud.
+    """
+    if message is None:
+        message = 'Please review latest Home Assitant notifications for critical alerts'
+
+    Device = Gb.Devices_by_devicename[devicename]
+    if Device.is_data_source_ICLOUD:
+        device_id = Device.icloud_device_id
+        if device_id and Device.PyiCloud and Device.PyiCloud.DeviceSvc:
+            Device.PyiCloud.DeviceSvc.display_message(device_id, message=message, sounds=sounds)
+
+            post_event(devicename, "iCloud Display Message Alert sent")
             return
