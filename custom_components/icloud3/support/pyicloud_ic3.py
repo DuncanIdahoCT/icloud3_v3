@@ -1929,7 +1929,7 @@ class PyiCloud_DeviceSvc():
 
 #----------------------------------------------------------------------------
     def display_message(self, device_id, subject="Find My iPhone Alert",
-                        message="This is a note", sounds=True):
+                        message="This is a note", sounds=False):
         '''
         Send a request to the device to display a message.
         It's possible to pass a custom message by changing the `subject`.
