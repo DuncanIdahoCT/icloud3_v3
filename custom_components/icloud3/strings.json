@@ -590,6 +590,24 @@
           "description": "The message to be sent"
         }
       }
+    },
+    "display_message_alert": {
+      "name": "Display Message Alert",
+      "description": "This service will display a message on the device and can also play an alert tone",
+      "fields": {
+        "device_name": {
+          "name": "Device Name",
+          "description": "Device the message should be displayed on"
+        },
+        "message": {
+          "name": "Message",
+          "description":  "The message to be sent"
+        },
+        "sounds": {
+          "name": "Sounds",
+          "description": "If a sound is to be played along with message"
+        }
+      }
     }
   }
 }
